@@ -1,0 +1,73 @@
+<h1>Github Analyzer</h1>
+
+<form (ngSubmit)="search()">
+    <input name="githubUsername" [(ngModel)]="githubUsername" placeholder="Enter a GitHub username" autocomplete="off" />
+    <button type="submit" [disabled]="loading()">{{ loading() ? 'Searching…' : 'Search' }}</button>
+</form>
+
+@if (error()) {
+    <div class="error">{{ error() }}</div>
+}
+
+@if (data(); as data) {
+    <div class="profile">
+        @if (data.avatar_url) {
+            <img [src]="data.avatar_url" [alt]="data.username" />
+        }
+        <div>
+            <h2>{{ data.name || data.username }}</h2>
+            @if (data.profile_url) {
+                <a [href]="data.profile_url" target="_blank" rel="noopener">&#64;{{ data.username }}</a>
+            }
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="label">Followers</div>
+            <div class="value">{{ data.followers }}</div>
+        </div>
+        <div class="stat">
+            <div class="label">Public repositories</div>
+            <div class="value">{{ data.repo_count }}</div>
+        </div>
+        <div class="stat">
+            <div class="label">Most used technology</div>
+            <div class="value">{{ data.most_used_language || '—' }}</div>
+        </div>
+    </div>
+    @if (data.messages.followers) {
+        <p class="notice">{{ data.messages.followers }}</p>
+    }
+
+    <h3>Technologies used</h3>
+    @if (data.languages.length) {
+        <ul class="tags">
+            @for (lang of data.languages; track lang.name) {
+                <li>{{ lang.name }} ({{ lang.count }})</li>
+            }
+        </ul>
+    } @else {
+        <p class="notice">{{ data.messages.languages || data.messages.repos || 'No technologies found.' }}</p>
+    }
+
+    <h3>Repositories</h3>
+    @if (data.repos.length) {
+        <ul class="repos">
+            @for (repo of data.repos; track repo.name) {
+                <li>
+                    <a [href]="repo.url" target="_blank" rel="noopener">{{ repo.name }}</a>
+                    @if (repo.fork) {
+                        <span class="notice"> (fork)</span>
+                    }
+                    @if (repo.description) {
+                        <div>{{ repo.description }}</div>
+                    }
+                    <div class="meta">{{ repo.language || 'No language detected' }} · ★ {{ repo.stars }}</div>
+                </li>
+            }
+        </ul>
+    } @else {
+        <p class="notice">{{ data.messages.repos }}</p>
+    }
+}
