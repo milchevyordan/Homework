@@ -1,4 +1,4 @@
-<h1>Github Analyzer</h1>
+<h1>Github Analyzer HSFT</h1>
 
 <form (ngSubmit)="search()">
     <input name="githubUsername" [(ngModel)]="githubUsername" placeholder="Enter a GitHub username" autocomplete="off" />
@@ -71,3 +71,9 @@
         <p class="notice">{{ data.messages.repos }}</p>
     }
 }
+
+<div class="footer-spacer"></div>
+<footer class="footer">
+    Built by Yordan Milchev ·
+    <a href="https://yordanmilchev.com" target="_blank" rel="noopener">yordanmilchev.com</a>
+</footer>

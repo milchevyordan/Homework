@@ -19,6 +19,7 @@ app.add_middleware(
 def get_user(username: str):
     """
     Return followers, repos, most used language and all languages for a GitHub user.
+    .strip removes spaces
     """
     username = username.strip()
     if not username:
